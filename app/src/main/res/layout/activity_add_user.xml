@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity_add_user">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre" />
+
+        <EditText
+            android:id="@+id/etApellido"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etNombre"
+            android:layout_marginTop="16dp"
+            android:hint="Apellido" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etApellido"
+            android:layout_marginTop="16dp"
+            android:inputType="textEmailAddress"
+            android:hint="Correo Electrónico" />
+
+        <EditText
+            android:id="@+id/etContraseña"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etEmail"
+            android:layout_marginTop="16dp"
+            android:inputType="textPassword"
+            android:hint="Contraseña" />
+
+        <EditText
+            android:id="@+id/etRol"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etContraseña"
+            android:layout_marginTop="16dp"
+            android:hint="Rol" />
+
+        <Button
+            android:id="@+id/btnAgregarUsuario"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etRol"
+            android:layout_marginTop="16dp"
+            android:text="Agregar Usuario" />
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

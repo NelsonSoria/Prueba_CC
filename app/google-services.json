@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "828169271714",
+    "project_id": "prueba-centrocomercial",
+    "storage_bucket": "prueba-centrocomercial.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828169271714:android:823182f84397135fce1afb",
+        "android_client_info": {
+          "package_name": "com.example.prueba_centrocomercial"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlqRMh7hiEgX0jEwjJFlhe4ysPQJxeA0E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

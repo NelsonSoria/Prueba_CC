@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/placeholder_logo"/>
+
+    <TextView
+        android:id="@+id/tvMallName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Nombre del Centro Comercial"/>
+
+    <TextView
+        android:id="@+id/tvLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:text="Ubicación del Centro Comercial"/>
+
+    <ImageView
+        android:id="@+id/ivOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/ic_menu_more"
+        android:contentDescription="@string/description_options_menu"
+        android:onClick="showOptionsMenu"
+        android:layout_gravity="end"
+        android:padding="8dp"/>
+
+</LinearLayout>

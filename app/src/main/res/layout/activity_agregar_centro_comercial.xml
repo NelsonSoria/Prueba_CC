@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity_agregar_centro_comercial">
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/etNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del Centro Comercial" />
+
+        <EditText
+            android:id="@+id/etUbicacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etNombre"
+            android:layout_marginTop="16dp"
+            android:hint="Ubicación del Centro Comercial" />
+
+        <EditText
+            android:id="@+id/etLogoUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etUbicacion"
+            android:layout_marginTop="16dp"
+            android:hint="URL del Logo del Centro Comercial" />
+
+        <Button
+            android:id="@+id/btnAgregarCentroComercial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etLogoUrl"
+            android:layout_marginTop="16dp"
+            android:text="Agregar Centro Comercial" />
+
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

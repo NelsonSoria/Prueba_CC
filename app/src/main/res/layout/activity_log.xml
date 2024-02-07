@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity_log">
+
+    <!-- Contenido de tu layout de inicio de sesión -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/etEmailLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Correo Electrónico"
+            android:inputType="textEmailAddress" />
+
+        <EditText
+            android:id="@+id/etContraseñaLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etEmailLogin"
+            android:layout_marginTop="16dp"
+            android:hint="Contraseña"
+            android:inputType="textPassword" />
+
+        <Button
+            android:id="@+id/btnIniciarSesion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/etContraseñaLogin"
+            android:layout_marginTop="16dp"
+            android:text="Iniciar Sesión" />
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
