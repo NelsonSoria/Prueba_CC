@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnLogin,btnAgregarUsuario,btnCerrarSesion,btnAgregarCentroC;
+    private Button btnLogin,btnAgregarUsuario,btnCerrarSesion,btnAgregarCentroC,btnAgregarTienda;
 
     private RecyclerView recyclerView;
     private CentroComercialAdapter centroComercialAdapter;
@@ -36,42 +36,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("MainActivity", "Fragmento en el layout: MainActivity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         btnLogin = findViewById(R.id.btnLogin);
         btnAgregarUsuario = findViewById(R.id.btnAgregarUsuario);
+        btnAgregarTienda=findViewById(R.id.btnAgregarTienda);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
         btnAgregarCentroC=findViewById(R.id.btnAgregarCentroC);
 
-        ////HOLA
-
-        recyclerView = findViewById(R.id.recyclerView);
-
-        // Configurar el diseño del RecyclerView
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // Obtener una referencia a la base de datos de Firebase
-        centrosComercialesRef = FirebaseDatabase.getInstance().getReference().child("centrosComerciales");
-
-        // Crear una lista de centros comerciales desde Firebase Realtime Database
-        obtenerListaDeCentrosComerciales();
-
-        // Crear un adaptador y establecerlo en el RecyclerView
-        centroComercialAdapter = new CentroComercialAdapter(new ArrayList<>(), this);
-        recyclerView.setAdapter(centroComercialAdapter);
-
-        centroComercialAdapter.setOnItemClickListener(new CentroComercialAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(CentroComercial centroComercial) {
-                // Lógica para manejar el clic en un elemento del RecyclerView
-                // Por ejemplo, iniciar una nueva actividad o fragmento con detalles del centro comercial
-                mostrarDetalleCentroComercial(centroComercial);
-            }
-        });
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.contenedor_principal, new lista_centros_comerciales())
+                .commit();
 
 
-        //FIN
 
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -145,6 +124,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnAgregarTienda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("MainActivity", "Botón de agregar tienda presionado");
+                Intent intent = new Intent(MainActivity.this, Agregar_Tienda.class);
+                startActivity(intent);
+            }
+        });
+
         btnAgregarCentroC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,50 +176,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-    private void obtenerListaDeCentrosComerciales() {
-        centrosComercialesRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<CentroComercial> centroComercialList = new ArrayList<>();
-
-                List<String> keys = new ArrayList<>();
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String centroComercialId = snapshot.getKey(); // Obtener la clave (key)
-                    CentroComercial centroComercial = snapshot.getValue(CentroComercial.class);
-
-                    centroComercialList.add(centroComercial);
-                    keys.add(centroComercialId.toString());
-
-                }
 
 
-                centroComercialAdapter.setCentroComercialList(centroComercialList);
-                centroComercialAdapter.setCentroComercialIds(keys); // Establecer el mapa en el adaptador
 
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("MainActivity", "Error al obtener datos de centros comerciales", databaseError.toException());
-            }
-        });
-    }
-
-
-    private void mostrarDetalleCentroComercial(CentroComercial centroComercial) {
-        // Oculta la lista (RecyclerView)
-        recyclerView.setVisibility(View.GONE);
-
-        // Crea una instancia del Fragment de detalle y pasa la información del centro comercial
-        CentroComercialDetalleFragment detalleFragment = CentroComercialDetalleFragment.newInstance(centroComercial);
-
-        // Reemplaza el contenido del contenedor principal con el Fragment de detalle
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.contenedor_principal, detalleFragment)
-                .addToBackStack(null)
-                .commit();
-    }
 
 }
