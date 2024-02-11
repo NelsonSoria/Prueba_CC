@@ -28,10 +28,11 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button btnLogin,btnAgregarUsuario,btnCerrarSesion,btnAgregarCentroC,btnAgregarTienda;
+    private Button btnLogin,btnCerrarSesion,btnAgregarCentroC,btnAgregarTienda;
 
     private RecyclerView recyclerView;
     private CentroComercialAdapter centroComercialAdapter;
+
     private DatabaseReference centrosComercialesRef;
 
     @Override
@@ -41,45 +42,48 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnLogin = findViewById(R.id.btnLogin);
-        btnAgregarUsuario = findViewById(R.id.btnAgregarUsuario);
+
         btnAgregarTienda=findViewById(R.id.btnAgregarTienda);
         btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
         btnAgregarCentroC=findViewById(R.id.btnAgregarCentroC);
-
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.contenedor_principal, new lista_centros_comerciales())
-                .commit();
-
-
-
-
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        boolean aux=false;
+        if (currentUser != null) {
+            aux=true;
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.contenedor_principal, new lista_centros_comerciales(aux,currentUser.getUid()))
+                    .commit();
+        }else{
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.contenedor_principal, new lista_centros_comerciales())
+                    .commit();
+        }
+
 
         if (currentUser != null) {
             Log.d("MainActivity", "Usuario autenticado: " + currentUser.getUid());
-            // Crea una instancia de la interfaz UserRoleCallback
+
             UserRoleCallback userRoleCallback = new UserRoleCallback() {
                 @Override
                 public void onUserRoleReceived(String userRole) {
-                    btnAgregarUsuario.setVisibility(View.VISIBLE);
+
                     btnCerrarSesion.setVisibility(View.VISIBLE);
                     btnLogin.setVisibility(View.GONE);
+                    btnAgregarCentroC.setVisibility(View.VISIBLE);
+
+
+                    Log.d("MainActivity", "id del Usuario: " +currentUser.getUid());
+
                     Log.d("MainActivity", "Rol del usuario: " + userRole);
                     // Si el usuario es dueño o jefe, muestra los botones correspondientes
-                    if ("empleado".equals(userRole)){
-                        btnAgregarUsuario.setVisibility(View.GONE);
+                    if ("encargado".equals(userRole)){
+
                         btnCerrarSesion.setVisibility(View.VISIBLE);
                         btnLogin.setVisibility(View.GONE);
+                        btnAgregarCentroC.setVisibility(View.GONE);
                         Log.d("MainActivity", "SoyEmpleado" );
                     }
-                    if ("gerente".equals(userRole)) {
-                        btnAgregarUsuario.setVisibility(View.GONE);
-                        btnCerrarSesion.setVisibility(View.VISIBLE);
-                        btnLogin.setVisibility(View.GONE);
-                    } else {
-                        // Si no es dueño ni jefe, oculta los botones de agregar usuario y cerrar sesión
 
-                    }
                 }
             };
 
@@ -105,24 +109,18 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
 
                 // Oculta los botones de agregar usuario y cerrar sesión, muestra el de inicio de sesión
-                btnAgregarUsuario.setVisibility(View.GONE);
                 btnCerrarSesion.setVisibility(View.GONE);
                 btnLogin.setVisibility(View.VISIBLE);
+                btnAgregarCentroC.setVisibility(View.GONE);
 
                 // Muestra un mensaje de cierre de sesión
                 Toast.makeText(MainActivity.this, "Cierre de sesión exitoso", Toast.LENGTH_SHORT).show();
+
+                // Vuelve a cargar el fragmento
+                loadFragment();
             }
         });
-        
-        
-        btnAgregarUsuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("MainActivity", "Botón de agregar usuario presionado");
-                Intent intent = new Intent(MainActivity.this, activity_add_user.class);
-                startActivity(intent);
-            }
-        });
+
 
         btnAgregarTienda.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +139,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void loadFragment() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        boolean aux = false;
+        if (currentUser != null) {
+            aux = true;
+        }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.contenedor_principal, new lista_centros_comerciales(aux, currentUser != null ? currentUser.getUid() : null))
+                .commit();
     }
 
     private void getUserRoleFromFirebase(String userId, UserRoleCallback userRoleCallback) {
@@ -176,9 +186,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-
-
 
 
 }

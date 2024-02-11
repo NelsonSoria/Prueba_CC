@@ -1,7 +1,6 @@
 package com.example.prueba_centrocomercial;
 
 import android.content.Context;
-import android.location.GnssAntennaInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,10 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.prueba_centrocomercial.Entidades.Tienda;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -29,10 +30,20 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
 
     private OnItemClickListener listener;
 
+    private boolean islogin;
+    private  String idUsuario;
 
+
+    public TiendaAdapter(List<Tienda> tiendaList, Context context,boolean islogin,String idUsuario) {
+        this.tiendaList = tiendaList;
+        this.context = context;
+        this.islogin=islogin;
+        this.idUsuario=idUsuario;
+    }
     public TiendaAdapter(List<Tienda> tiendaList, Context context) {
         this.tiendaList = tiendaList;
         this.context = context;
+
     }
 
     @NonNull
@@ -46,8 +57,8 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Tienda tienda = tiendaList.get(position);
         holder.tvNombre.setText(tienda.getNombre());
-        holder.tvDescripcion.setText(tienda.getDescripcion());
-
+        holder.tvDescripcion.setText(tienda.getDescripcionUbicacion());
+        Picasso.get().load(tienda.getUrlLogo()).placeholder(R.drawable.placeholder_logo).into(holder.ivLogo);
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -58,6 +69,19 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
                 }
             }
         });
+
+        String idAdmin="3jbB55yjH6ft2cV9vQ5pGqkTuI92";
+        if(this.islogin) {
+            if (idAdmin.equals(this.idUsuario)) {
+                holder.ivOptions.setVisibility(View.VISIBLE);
+            } else if (tienda.getIdUsuarioEncargado().equals(this.idUsuario)) {
+                holder.ivOptions.setVisibility(View.VISIBLE);
+            } else {
+                holder.ivOptions.setVisibility(View.GONE);
+            }
+        }else {
+            holder.ivOptions.setVisibility(View.GONE);
+        }
 
         holder.ivOptions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +126,9 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
                         notifyDataSetChanged();
                         return true;
                     case R.id.menu_tienda_agregar_producto:
-                        notifyDataSetChanged();
+                        if (agregarProductoClickListener != null) {
+                            agregarProductoClickListener.onAgregarProductoClick(tienda.getId(), tienda.getIdUsuarioEncargado());
+                        }
                         return true;
 
                     default:
@@ -144,12 +170,24 @@ public class TiendaAdapter extends RecyclerView.Adapter<TiendaAdapter.ViewHolder
         TextView tvDescripcion;
         ImageView ivOptions;
 
+        ImageView ivLogo;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvNombre = itemView.findViewById(R.id.tvNombreTienda);
             tvDescripcion = itemView.findViewById(R.id.tvDescripcionTienda);
             ivOptions = itemView.findViewById(R.id.ivOptions);
+            ivLogo = itemView.findViewById(R.id.ivLogo);
         }
+    }
+    public interface OnAgregarProductoClickListener {
+        void onAgregarProductoClick(String tiendaId, String usuarioId);
+    }
+
+    private OnAgregarProductoClickListener agregarProductoClickListener;
+
+    public void setOnAgregarProductoClickListener(OnAgregarProductoClickListener listener) {
+        this.agregarProductoClickListener = listener;
     }
 
 }

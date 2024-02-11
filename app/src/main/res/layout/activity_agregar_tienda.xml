@@ -20,10 +20,10 @@
         android:layout_marginTop="16dp"/>
 
     <EditText
-        android:id="@+id/etDescripcionTienda"
+        android:id="@+id/etDescripcionUbicacionTienda"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Descripción de la tienda"
+        android:hint="Descripción de la Ubicacion tienda"
         android:inputType="textMultiLine"
         android:minLines="3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,20 +33,104 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"/>
 
+
     <EditText
-        android:id="@+id/etTelefonoTienda"
+        android:id="@+id/ethorario"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Horario de la tienda"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etDescripcionUbicacionTienda"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"/>
+
+
+    <EditText
+        android:id="@+id/eturlLogo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Url del logo de la tienda"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ethorario"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/ettelefono"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Teléfono de la tienda"
         android:inputType="phone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etDescripcionTienda"
+        app:layout_constraintTop_toBottomOf="@id/eturlLogo"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"/>
+    <TextView
+        android:id="@+id/tvRegistro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="¿El usuario está registrado?"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/radioGroupRegistro"
+        app:layout_constraintTop_toTopOf="@+id/radioGroupRegistro" />
+    <RadioGroup
+        android:id="@+id/radioGroupRegistro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ettelefono">
 
-    <!-- Puedes agregar más EditTexts aquí para ingresar otros detalles de la tienda -->
+        <RadioButton
+            android:id="@+id/radioButtonSi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sí" />
+
+        <RadioButton
+            android:id="@+id/radioButtonNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/layoutCamposRegistro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupRegistro"
+        android:visibility="gone">
+
+        <!-- Campo para correo electrónico -->
+        <EditText
+            android:id="@+id/editTextCorreo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Correo electrónico" />
+
+        <!-- Campo para contraseña -->
+        <EditText
+            android:id="@+id/editTextContrasena"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            android:inputType="textPassword" />
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/btnCrearTienda"
@@ -55,7 +139,7 @@
         android:text="Crear Tienda"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etTelefonoTienda"
+        app:layout_constraintTop_toBottomOf="@id/layoutCamposRegistro"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"/>

@@ -1,5 +1,7 @@
 package com.example.prueba_centrocomercial;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.prueba_centrocomercial.Entidades.CentroComercial;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,11 +33,25 @@ public class lista_centros_comerciales extends Fragment {
     private CentroComercialAdapter centroComercialAdapter;
     private DatabaseReference centrosComercialesRef;
 
+    private  boolean islogin;
 
+    private String idUsuario;
+    private Context context;
+
+
+
+    public lista_centros_comerciales(boolean islogin,String idUsuario) {
+        this.islogin=islogin;
+        this.idUsuario=idUsuario;
+    }
     public lista_centros_comerciales() {
 
     }
-
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.context = context;
+    }
 
     public static lista_centros_comerciales newInstance(String param1, String param2) {
         lista_centros_comerciales fragment = new lista_centros_comerciales();
@@ -64,7 +81,7 @@ public class lista_centros_comerciales extends Fragment {
         obtenerListaDeCentrosComerciales();
 
         // Crear un adaptador y establecerlo en el RecyclerView
-        centroComercialAdapter = new CentroComercialAdapter(new ArrayList<>(), getContext());
+        centroComercialAdapter = new CentroComercialAdapter(new ArrayList<>(), getContext(),this.islogin,this.idUsuario);
         recyclerView.setAdapter(centroComercialAdapter);
 
         centroComercialAdapter.setOnItemClickListener(new CentroComercialAdapter.OnItemClickListener() {
@@ -75,6 +92,17 @@ public class lista_centros_comerciales extends Fragment {
                 mostrarDetalleCentroComercial(centroComercial);
             }
         });
+
+
+        centroComercialAdapter.setOnAgregarTiendaClickListener(new CentroComercialAdapter.OnAgregarTiendaClickListener() {
+            @Override
+            public void onAgregarTiendaClick(String tiendaId) {
+                agregarTienda(tiendaId);
+            }
+        });
+
+
+
 
         // Devuelve la vista inflada
         return view;
@@ -110,15 +138,25 @@ public class lista_centros_comerciales extends Fragment {
     }
     private void mostrarDetalleCentroComercial(CentroComercial centroComercial) {
         // Oculta la lista (RecyclerView)
+
+        boolean aux=false;
         recyclerView.setVisibility(View.GONE);
 
         // Crea una instancia del Fragment de detalle y pasa la información del centro comercial
-        CentroComercialDetalleFragment detalleFragment = CentroComercialDetalleFragment.newInstance(centroComercial);
+       CentroComercialDetalleFragment detalleFragment = CentroComercialDetalleFragment.newInstance(centroComercial,this.islogin,this.idUsuario);
 
         // Reemplaza el contenido del contenedor principal con el Fragment de detalle
         getParentFragmentManager().beginTransaction()
                 .replace(R.id.contenedor_principal, detalleFragment)
                 .addToBackStack(null)
                 .commit();
+
+
+    }
+    private void agregarTienda(String id) {
+        Intent intent = new Intent(context, Agregar_Tienda.class);
+        intent.putExtra("idTienda", id); // Puedes pasar cualquier otro dato necesario
+        context.startActivity(intent);
+
     }
 }

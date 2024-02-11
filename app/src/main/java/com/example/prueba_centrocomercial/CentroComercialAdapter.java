@@ -1,6 +1,7 @@
 package com.example.prueba_centrocomercial;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,15 +15,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.prueba_centrocomercial.Entidades.CentroComercial;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class CentroComercialAdapter extends RecyclerView.Adapter<CentroComercialAdapter.ViewHolder> {
 
@@ -30,15 +30,27 @@ public class CentroComercialAdapter extends RecyclerView.Adapter<CentroComercial
     private  List<String> keys;
     private Context context;
 
+    private boolean islogin;
+    private  String idUsuario;
+
+
+   int aux=0;
+
+
     public void setCentroComercialIds( List<String> keys) {
 
         this.keys = keys;
        // System.out.println("tamanio en adapter: " + centroComercialIds.size());
     }
 
-    public CentroComercialAdapter(List<CentroComercial> centroComercialList, Context context) {
+    public CentroComercialAdapter() {
+
+    }
+    public CentroComercialAdapter(List<CentroComercial> centroComercialList, Context context,boolean islogin,String idUsuario) {
         this.centroComercialList = centroComercialList;
         this.context = context;
+        this.islogin=islogin;
+        this.idUsuario=idUsuario;
     }
 
     @NonNull
@@ -56,14 +68,14 @@ public class CentroComercialAdapter extends RecyclerView.Adapter<CentroComercial
         nuevo.setId(keys.get(position));
         nuevo.setNombre(centroComercial.getNombre());
         nuevo.setUbicacion(centroComercial.getUbicacion());
-        nuevo.setLogoUrl(centroComercial.getLogoUrl());
+        nuevo.setImagInfraEstructuraUrl(centroComercial.getImagInfraEstructuraUrl());
 
 
         holder.tvMallName.setText(centroComercial.getNombre());
         holder.tvLocation.setText(centroComercial.getUbicacion());
 
         // Cargar el logo del centro comercial utilizando Picasso (puedes usar Glide también)
-        Picasso.get().load(centroComercial.getLogoUrl()).into(holder.ivLogo);
+        Picasso.get().load(centroComercial.getImagInfraEstructuraUrl()).into(holder.ivLogo);
 
         // Configurar el clic del elemento
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -74,6 +86,22 @@ public class CentroComercialAdapter extends RecyclerView.Adapter<CentroComercial
                 }
             }
         });
+
+
+
+        String idAdmin="3jbB55yjH6ft2cV9vQ5pGqkTuI92";
+        if(this.islogin) {
+            if (idAdmin.equals(this.idUsuario)) {
+                holder.ivOptions.setVisibility(View.VISIBLE);
+            } else if (centroComercial.getIdUsuarioPermitido().equals(this.idUsuario)) {
+                holder.ivOptions.setVisibility(View.VISIBLE);
+            } else {
+                holder.ivOptions.setVisibility(View.GONE);
+            }
+        }else {
+            holder.ivOptions.setVisibility(View.GONE);
+        }
+
 
         holder.ivOptions.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +127,13 @@ public class CentroComercialAdapter extends RecyclerView.Adapter<CentroComercial
                         // Notifica al adaptador que el conjunto de datos ha cambiado
                         notifyDataSetChanged();
                         return true;
-                    // Agrega más elementos de menú según tus necesidades
-                    // ...
+                    case R.id.menu_modificar:
+                        notifyDataSetChanged();
+                    case R.id.menu_agregar_tienda:
+                        if (agregarTiendaClickListener != null) {
+                            agregarTiendaClickListener.onAgregarTiendaClick(centroComercial.getId());
+                        }
+                        return true;
                     default:
                         return false;
                 }
@@ -110,6 +143,7 @@ public class CentroComercialAdapter extends RecyclerView.Adapter<CentroComercial
         // Mostrar el menú contextual
         popupMenu.show();
     }
+
 
     public void deleteItem(CentroComercial centroComercial) {
         if (centroComercial != null) {
@@ -147,7 +181,14 @@ public class CentroComercialAdapter extends RecyclerView.Adapter<CentroComercial
             }
         }
     }
+    public void setlogin(boolean islogin) {
+        this.islogin = islogin;
+    }
 
+    // Método para establecer si el usuario es un encargado de un centro comercial
+    public void setEncargado(String id) {
+        this.idUsuario = id;
+    }
 
     @Override
     public int getItemCount() {
@@ -183,5 +224,14 @@ public class CentroComercialAdapter extends RecyclerView.Adapter<CentroComercial
             ivLogo = itemView.findViewById(R.id.ivLogo);
             ivOptions = itemView.findViewById(R.id.ivOptions);
         }
+    }
+    public interface OnAgregarTiendaClickListener {
+        void onAgregarTiendaClick(String tiendaId);
+    }
+
+    private OnAgregarTiendaClickListener agregarTiendaClickListener;
+
+    public void setOnAgregarTiendaClickListener(OnAgregarTiendaClickListener listener) {
+        this.agregarTiendaClickListener = listener;
     }
 }
